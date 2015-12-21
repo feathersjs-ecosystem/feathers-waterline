@@ -27,4 +27,7 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+# Sails-Disk adapter default storage location
+.tmp/
+
 lib/

@@ -1,48 +1,143 @@
-import makeDebug from 'debug';
+if(!global._babelPolyfill) { require('babel-polyfill'); }
+
 import Proto from 'uberproto';
 import filter from 'feathers-query-filters';
-import { types as errors } from 'feathers-errors';
+import errors from 'feathers-errors';
+import * as utils from './utils';
 
-const debug = makeDebug('feathers-waterline');
+class Service {
+  constructor(options) {
+    this.paginate = options.paginate || {};
+    this.Model = options.Model;
+    this.id = options.id || 'id';
+  }
 
-// Create the service.
-const Service = Proto.extend({
-	init(Model) {
-    this.Model = Model;
-	},
+  extend(obj) {
+    return Proto.extend(obj, this);
+  }
 
-	find(params, callback) {
-    this.Model.find().exec(callback);
-	},
+  find(params) {
+    let where = utils.getWhere(params.query);
+    let filters = filter(where);
+    let order = utils.getOrder(filters.$sort);
+    let select = utils.getSelect(filters.$select);
+    let limit = false;
+    let count = this.Model.count().where(where);
+    let query = this.Model.find().where(where, select);
 
-	get(id, params, callback) {
-		if(typeof id === 'function') {
-			return id(new errors.BadRequest('An id needs to be provided'));
-		}
+    if (order) {
+      query.sort(order);
+    }
 
-		this.Model.findOne({ id }, callback);
-	},
+    if (filters.$skip) {
+      query.skip(filters.$skip);
+    }
 
-	create(data, params, callback) {
-		this.Model.create(data, callback);
-	},
+    if (this.paginate.default) {
+      limit = Math.min(filters.$limit || this.paginate.default,
+        this.paginate.max || Number.MAX_VALUE);
 
-	patch(id, data, params, callback) {
-    // TODO get first, then remove other fields
-    this.Model.update({ id }, data, callback);
-	},
+      query.limit(limit);
+    }
 
-	update(id, data, params, callback) {
-    this.Model.update({ id }, data, callback);
-	},
+    return count.then(total => {
+      return query.then(result => {
+        return {
+          total,
+          limit,
+          skip: filters.$skip || 0,
+          data: result
+        };
+      }).catch(utils.errorHandler);
+    }).catch(utils.errorHandler);
+  }
 
-	remove(id, params, callback) {
-		this.Model.destroy({ id }, callback);
-	}
-});
+  get(id) {
+    return this.Model.findOne({ id }).then(instance => {
+      if (!instance) {
+        throw new errors.NotFound(`No record found for id '${id}'`);
+      }
 
-export default function create() {
-  return Proto.create.apply(Service, arguments);
+      return instance;
+    }).catch(utils.errorHandler);
+  }
+
+  create(data) {
+    return this.Model.create(data).then(instance => {
+      return instance;
+    }).catch(utils.errorHandler);
+  }
+
+  patch(id, data, params) {
+    const where = Object.assign({}, params.query);
+
+    if (id !== null) {
+      where[this.id] = id;
+    }
+
+    delete data[this.id];
+
+    return this.Model.update({ where }, data).then(() => {
+      if (id === null) {
+        return this.find(params);
+      }
+
+      return this.get(id, params);
+    })
+    .catch(utils.errorHandler);
+  }
+
+  update(id, data) {
+    if (Array.isArray(data)) {
+      return Promise.reject('Not replacing multiple records. Did you mean `patch`?');
+    }
+
+    delete data[this.id];
+
+    return this.Model.findOne({ id }).then(instance => {
+      if (!instance) {
+        throw new errors.NotFound(`No record found for id '${id}'`);
+      }
+
+      let copy = {};
+      Object.keys(instance.toJSON()).forEach(key => {
+        
+        // NOTE (EK): Make sure that we don't waterline created fields to null
+        // just because a user didn't pass them in.
+        if ((key === 'createdAt' || key === 'updatedAt') && typeof data[key] === 'undefined') {
+          return;
+        }
+
+        if (typeof data[key] === 'undefined') {
+          copy[key] = null;
+        } else {
+          copy[key] = data[key];
+        }
+      });
+
+      return this.patch(id, copy, {});
+    })
+    .catch(utils.errorHandler);
+  }
+
+  remove(id, params) {
+    const promise = id === null ? this.find(params) : this.get(id);
+
+    return promise.then(data => {
+      const where = Object.assign({}, params.query);
+
+      if (id !== null) {
+        where.id = id;
+      }
+
+      return this.Model.destroy({ where }).then(() => data);
+    })
+    .catch(utils.errorHandler);
+  }
 }
 
-create.Service = Service;
+export default function init(Model) {
+  return new Service(Model);
+}
+
+init.Service = Service;

@@ -1,51 +1,90 @@
-import assert from 'assert';
+import { base, orm, /*example*/ } from 'feathers-service-tests';
 import Waterline from 'waterline';
 import diskAdapter from 'sails-disk';
-import plugin from '../src';
+import errors from 'feathers-errors';
+import feathers from 'feathers';
+import service from '../src';
+// import server from '../example/app';
 
+let user;
+let people;
+const _ids = {};
+const app = feathers();
 const config = {
   adapters: {
-    'default': diskAdapter,
-    disk: diskAdapter
+    'disk': diskAdapter
   },
-
   connections: {
-    myLocalDisk: {
+    localDisk: {
       adapter: 'disk'
     }
   },
-
   defaults: {
     migrate: 'alter'
   }
-
 };
-const orm = new Waterline();
-
-describe('feathers-waterline', () => {
-  // Define your collection (aka model)
-  var User = Waterline.Collection.extend({
-    identity: 'user',
-    connection: 'myLocalDisk',
-
-    attributes: {
-      name: {
-        type: 'string',
-        required: true
-      },
-
-      age: {
-        type: 'integer'
-      }
+const User = Waterline.Collection.extend({
+  identity: 'user',
+  connection: 'localDisk',
+  attributes: {
+    name: {
+      type: 'string',
+      required: true
+    },
+    age: {
+      type: 'integer'
     }
+  }
+});
+
+const ORM = new Waterline();
+
+describe('Feathers Waterline Service', () => {
+  before((done) => {
+    ORM.loadCollection(User);
+    ORM.initialize(config, (error, ontology) => {
+      if (error) {
+        console.error(error);
+      }
+
+      user = ontology.collections.user;
+      app.use('/people', service({ Model: user }));
+      people = app.service('people');
+      done();
+    });
   });
 
-  it('is CommonJS compatible', () => {
-    assert.equal(typeof require('../lib'), 'function');
+  describe('Common functionality', () => {
+    beforeEach(done => {
+      user.create({
+        name: 'Doug',
+        age: 32
+      }).then(user => {
+        _ids.Doug = user.id;
+        return done();
+      });
+    });
+
+    afterEach(done => {
+      user.destroy().then(() => {
+        return done();
+      });
+    });
+
+    // FIXME(EK): people is undefined here because
+    // we need to call ORM.initialize and it is async
+    // so .base() gets called before the intialize callback
+    // has been called :-(
+    base(people, _ids, errors);
   });
 
-  it('basic functionality', done => {
-    assert.equal(typeof plugin, 'function', 'It worked');
-    done();
+  describe('Waterline service ORM errors', () => {
+    orm(people, _ids, errors);
   });
+
+  // describe.skip('Waterline service example test', () => {
+  //   after(done => server.close(() => done()));
+
+  //   example();
+  // });
 });

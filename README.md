@@ -378,13 +378,9 @@ query: {
 
 ## Changelog
 
-__0.2.0__
-
-- First working release. Tests still need fixing but basic functionality works.
-
 __0.1.0__
 
-- Initial release
+- First working release. Tests still need fixing but basic functionality works.
 
 ## License
 

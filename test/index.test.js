@@ -39,52 +39,49 @@ const User = Waterline.Collection.extend({
 
 const ORM = new Waterline();
 
-describe('Feathers Waterline Service', () => {
-  before((done) => {
-    ORM.loadCollection(User);
-    ORM.initialize(config, (error, ontology) => {
-      if (error) {
-        console.error(error);
-      }
+ORM.loadCollection(User);
+ORM.initialize(config, (error, ontology) => {
+  if (error) {
+    console.error(error);
+  }
 
-      user = ontology.collections.user;
-      app.use('/people', service({ Model: user }));
-      people = app.service('people');
-      done();
-    });
-  });
+  user = ontology.collections.user;
+  app.use('/people', service({ Model: user }));
+  people = app.service('people');
 
-  describe('Common functionality', () => {
-    beforeEach(done => {
-      user.create({
-        name: 'Doug',
-        age: 32
-      }).then(user => {
-        _ids.Doug = user.id;
-        return done();
+  describe('Feathers Waterline Service', () => {
+    describe('Common functionality', () => {
+      beforeEach(done => {
+        user.create({
+          name: 'Doug',
+          age: 32
+        }).then(user => {
+          _ids.Doug = user.id;
+          return done();
+        });
       });
-    });
 
-    afterEach(done => {
-      user.destroy().then(() => {
-        return done();
+      afterEach(done => {
+        user.destroy().then(() => {
+          return done();
+        });
       });
+
+      // FIXME(EK): people is undefined here because
+      // we need to call ORM.initialize and it is async
+      // so .base() gets called before the intialize callback
+      // has been called :-(
+      base(people, _ids, errors);
     });
 
-    // FIXME(EK): people is undefined here because
-    // we need to call ORM.initialize and it is async
-    // so .base() gets called before the intialize callback
-    // has been called :-(
-    base(people, _ids, errors);
+    describe('Waterline service ORM errors', () => {
+      orm(people, _ids, errors);
+    });
+
+    // describe.skip('Waterline service example test', () => {
+    //   after(done => server.close(() => done()));
+
+    //   example();
+    // });
   });
-
-  describe('Waterline service ORM errors', () => {
-    orm(people, _ids, errors);
-  });
-
-  // describe.skip('Waterline service example test', () => {
-  //   after(done => server.close(() => done()));
-
-  //   example();
-  // });
 });

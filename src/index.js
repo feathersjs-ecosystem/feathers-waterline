@@ -20,10 +20,10 @@ class Service {
     let where = utils.getWhere(params.query);
     let filters = filter(where);
     let order = utils.getOrder(filters.$sort);
-    let select = utils.getSelect(filters.$select);
+    let options = filters.$select ? { select: Array.from(filters.$select) } : {};
     let limit = false;
     let count = this.Model.count().where(where);
-    let query = this.Model.find().where(where, select);
+    let query = this.Model.find(where, options);
 
     if (order) {
       query.sort(order);
@@ -38,17 +38,23 @@ class Service {
         this.paginate.max || Number.MAX_VALUE);
 
       query.limit(limit);
+    } else if(filters.$limit) {
+      query.limit(filters.$limit);
+    }
+
+    if(!this.paginate.default) {
+      return query.then().catch(utils.errorHandler);
     }
 
     return count.then(total => {
-      return query.then(result => {
+      return query.then(data => {
         return {
           total,
           limit,
           skip: filters.$skip || 0,
-          data: result
+          data
         };
-      }).catch(utils.errorHandler);
+      });
     }).catch(utils.errorHandler);
   }
 
@@ -101,7 +107,7 @@ class Service {
 
       let copy = {};
       Object.keys(instance.toJSON()).forEach(key => {
-        
+
         // NOTE (EK): Make sure that we don't waterline created fields to null
         // just because a user didn't pass them in.
         if ((key === 'createdAt' || key === 'updatedAt') && typeof data[key] === 'undefined') {

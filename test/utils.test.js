@@ -165,21 +165,7 @@ describe('Feathers Waterline Utils', () => {
       expect(order).to.deep.equal({ name: 'asc', age: 'desc' });
     });
   });
-
-  describe('getSelect', () => {
-    it('returns empty array when nothing is passed in', () => {
-      let select = utils.getSelect();
-
-      expect(select).to.deep.equal([]);
-    });
-
-    it('returns select properly converted', () => {
-      let select = utils.getSelect({ name: 1, email: 1, age: -1 });
-
-      expect(select).to.deep.equal(['name', 'email']);
-    });
-  });
-
+  
   describe('getWhere', () => {
     it('returns empty object when nothing is passed in', () => {
       let where = utils.getWhere();
@@ -190,13 +176,13 @@ describe('Feathers Waterline Utils', () => {
     it('returns where conditions properly converted', () => {
       let where = utils.getWhere({ name: 'Joe', age: { $lte: 25 }});
 
-      expect(where).to.deep.equal({ name: 'Joe', age: { $lte: 25 }});
+      expect(where).to.deep.equal({ name: 'Joe', age: { '<=': 25 }});
     });
 
     it('converts $nin to $notIn', () => {
       let where = utils.getWhere({ name: { $nin: ['Joe', 'Alice'] }});
 
-      expect(where).to.deep.equal({ name: { $notIn: ['Joe', 'Alice'] }});
+      expect(where).to.deep.equal({ name: { '!': ['Joe', 'Alice'] }});
     });
   });
 });

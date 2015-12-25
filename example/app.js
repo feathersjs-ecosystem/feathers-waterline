@@ -1,3 +1,5 @@
+if(!global._babelPolyfill) { require('babel-polyfill'); }
+
 var feathers = require('feathers');
 var bodyParser = require('body-parser');
 var Waterline = require('waterline');
@@ -27,8 +29,7 @@ var Todo = Waterline.Collection.extend({
   attributes: {
     text: {
       type: 'string',
-      required: true,
-      unique: true
+      required: true
     },
 
     complete: {
@@ -48,28 +49,32 @@ var app = feathers()
   // Turn on URL-encoded parser for REST services
   .use(bodyParser.urlencoded({ extended: true }));
 
-ORM.loadCollection(Todo);
-ORM.initialize(config, (error, data) => {
-  if (error) {
-    console.error(error);
-  }
-  
-  // Create a Waterline Feathers service with a default page size of 2 items
-  // and a maximum size of 4
-  app.use('/todos', waterline({
-    Model: data.collections.todo,
-    paginate: {
-      default: 2,
-      max: 4
+module.exports = new Promise(function(resolve) {
+  ORM.loadCollection(Todo);
+  ORM.initialize(config, (error, data) => {
+    if (error) {
+      console.error(error);
     }
-  }));
 
-  app.use(function(error, req, res, next){
-    res.json(error);
+    // Create a Waterline Feathers service with a default page size of 2 items
+    // and a maximum size of 4
+    app.use('/todos', waterline({
+      Model: data.collections.todo,
+      paginate: {
+        default: 2,
+        max: 4
+      }
+    }));
+
+    app.use(function(error, req, res, next){
+      res.json(error);
+    });
+
+    // Start the server
+    var server = app.listen(3030);
+    server.on('listening', function() {
+      console.log('Feathers Todo waterline service running on 127.0.0.1:3030');
+      resolve(server);
+    });
   });
-
-  // Start the server
-  module.exports = app.listen(3030);
-
-  console.log('Feathers Todo waterline service running on 127.0.0.1:3030');
 });

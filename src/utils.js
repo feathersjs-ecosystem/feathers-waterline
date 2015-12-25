@@ -4,15 +4,6 @@ import { adapter as Errors } from 'waterline-errors';
 export function errorHandler(error) {
   let feathersError = error;
 
-  // console.log('ERROR MESSAGE', error.message);
-  // console.log('ERROR TYPE', error.constructor.name);
-  // console.log('ERROR NAME', error.name);
-  // console.log('ERROR STATUS', error.status);
-  // console.log('ERROR CODE', error.code);
-  // console.log('ERROR ERRORS', error.errors);
-  // if (error.toJSON) {
-  //   console.log('ERROR JSON', error.toJSON());
-  // }
   if (error.constructor.name && (error.constructor.name === 'WLValidationError' || error.constructor.name === 'WLUsageError' )) {
     let e = error.toJSON();
     let data = Object.assign({ errors: error.errors}, e);
@@ -46,7 +37,7 @@ export function errorHandler(error) {
         break;
     }
   }
-  
+
   throw feathersError;
 }
 
@@ -60,30 +51,51 @@ export function getOrder(sort={}) {
   return order;
 }
 
-export function getSelect(select={}) {
-  let selected = [];
+const queryMappings = {
+  $lt: '<',
+  $lte: '<=',
+  $gt: '>',
+  $gte: '>=',
+  $ne: '!',
+  $nin: '!'
+};
 
-  Object.keys(select).forEach(name => {
-    if (select[name] === 1) {
-      selected.push(name);
-    }
-  });
+const specials = ['$sort', '$limit', '$skip', '$select'];
 
-  return selected;
+function getValue(value, prop) {
+  if(typeof value === 'object' && specials.indexOf(prop) === -1) {
+    let query = {};
+
+    Object.keys(value).forEach(key => {
+      if(queryMappings[key]) {
+        query[queryMappings[key]] = value[key];
+      } else {
+        query[key] = value[key];
+      }
+    });
+
+    return query;
+  }
+
+  return value;
 }
 
 export function getWhere(query) {
-  let where = Object.assign({}, query);
+  let where = {};
 
-  Object.keys(where).forEach(prop => {
-    let value = where[prop];
-    if (value.$nin) {
-      value = Object.assign({}, value);
+  if(typeof query !== 'object') {
+    return {};
+  }
 
-      value.$notIn = value.$nin;
-      delete value.$nin;
+  Object.keys(query).forEach(prop => {
+    const value = query[prop];
 
-      where[prop] = value;
+    if(prop === '$or') {
+      where.or = value;
+    } else if(value.$in) {
+      where[prop] = value.$in;
+    } else {
+      where[prop] = getValue(value, prop);
     }
   });
 

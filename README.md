@@ -101,6 +101,7 @@ ORM.initialize(config, (error, data) => {
     }
   }));
 
+  // basic error handler
   app.use(function(error, req, res, next){
     res.json(error);
   });
@@ -113,7 +114,7 @@ ORM.initialize(config, (error, data) => {
 
 ```
 
-You can run this example by using `node examples/app` and going to [localhost:8080/todos](http://localhost:8080/todos). You should see an empty array. That's because you don't have any Todos yet but you now have full CRUD for your new todos service.
+You can run this example by using `node examples/app` and going to [localhost:3030/todos](http://localhost:3030/todos). You should see an empty array. That's because you don't have any Todos yet but you now have full CRUD for your new todos service.
 
 ## Extending
 
@@ -378,9 +379,14 @@ query: {
 
 ## Changelog
 
+__1.0.0__
+
+- First official release. Fully supports feathers adapter spec.
+- All tests are now passing.
+
 __0.1.0__
 
-- First working release. Tests still need fixing but basic functionality works.
+- First semi-working release. Tests still need fixing but basic functionality works.
 
 ## License
 

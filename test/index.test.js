@@ -1,10 +1,10 @@
-import { base, orm, /*example*/ } from 'feathers-service-tests';
+import { base, orm, example } from 'feathers-service-tests';
 import Waterline from 'waterline';
 import diskAdapter from 'sails-disk';
 import errors from 'feathers-errors';
 import feathers from 'feathers';
 import service from '../src';
-// import server from '../example/app';
+import exampleServer from '../example/app';
 
 let user;
 let people;
@@ -67,21 +67,16 @@ ORM.initialize(config, (error, ontology) => {
         });
       });
 
-      // FIXME(EK): people is undefined here because
-      // we need to call ORM.initialize and it is async
-      // so .base() gets called before the intialize callback
-      // has been called :-(
       base(people, _ids, errors);
     });
 
-    describe('Waterline service ORM errors', () => {
-      orm(people, _ids, errors);
+    describe('Waterline service ORM errors', () => orm(people, _ids, errors));
+
+    describe('Waterline service example test', () => {
+      before(done => exampleServer.then(() => done()));
+      after(done => exampleServer.then(s => s.close(() => done())));
+
+      example();
     });
-
-    // describe.skip('Waterline service example test', () => {
-    //   after(done => server.close(() => done()));
-
-    //   example();
-    // });
   });
 });

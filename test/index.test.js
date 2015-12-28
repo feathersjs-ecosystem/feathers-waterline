@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { base, orm, example } from 'feathers-service-tests';
 import Waterline from 'waterline';
 import diskAdapter from 'sails-disk';
@@ -50,6 +51,10 @@ ORM.initialize(config, (error, ontology) => {
   people = app.service('people');
 
   describe('Feathers Waterline Service', () => {
+    it('is CommonJS compatible', () => {
+      expect(typeof require('../lib')).to.equal('function');
+    });
+
     describe('Common functionality', () => {
       beforeEach(done => {
         user.create({

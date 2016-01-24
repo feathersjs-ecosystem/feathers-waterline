@@ -1,13 +1,14 @@
 if(!global._babelPolyfill) { require('babel-polyfill'); }
 
-var feathers = require('feathers');
-var bodyParser = require('body-parser');
-var Waterline = require('waterline');
-var diskAdapter = require('sails-disk');
-var waterline = require('../lib');
-var ORM = new Waterline();
+import feathers from 'feathers';
+import rest from 'feathers-rest';
+import bodyParser from 'body-parser';
+import Waterline from 'waterline';
+import diskAdapter from 'sails-disk';
+import waterline from '../lib';
 
-var config = {
+const ORM = new Waterline();
+const config = {
   adapters: {
     'default': diskAdapter,
     disk: diskAdapter
@@ -21,8 +22,7 @@ var config = {
     migrate: 'alter'
   }
 };
-
-var Todo = Waterline.Collection.extend({
+const Todo = Waterline.Collection.extend({
   identity: 'todo',
   schema: true,
   connection: 'myLocalDisk',
@@ -39,11 +39,9 @@ var Todo = Waterline.Collection.extend({
 });
 
 // Create a feathers instance.
-var app = feathers()
-  // Enable Socket.io
-  .configure(feathers.socketio())
+const app = feathers()
   // Enable REST services
-  .configure(feathers.rest())
+  .configure(rest())
   // Turn on JSON parser for REST services
   .use(bodyParser.json())
   // Turn on URL-encoded parser for REST services
@@ -71,7 +69,7 @@ module.exports = new Promise(function(resolve) {
     });
 
     // Start the server
-    var server = app.listen(3030);
+    const server = app.listen(3030);
     server.on('listening', function() {
       console.log('Feathers Todo waterline service running on 127.0.0.1:3030');
       resolve(server);

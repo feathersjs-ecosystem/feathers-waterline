@@ -106,6 +106,14 @@ You can run this example by using `node examples/app` and going to [localhost:80
 
 ## Changelog
 
+__1.1.0__
+
+- Use internal methods instead of service methods directly
+
+__1.0.0__
+
+- Stable release of finalized adapter
+ 
 __0.1.0__
 
 - First working release. Tests still need fixing but basic functionality works.

@@ -59,7 +59,7 @@
     "feathers-rest": "^1.1.1",
     "feathers-service-tests": "^0.5.2",
     "jshint": "^2.8.0",
-    "mocha": "^2.5.0",
+    "mocha": "^2.5.2",
     "nsp": "^2.2.0",
     "sails-disk": "^0.10.8",
     "waterline": "^0.12.1"

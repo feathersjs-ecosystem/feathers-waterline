@@ -9,8 +9,7 @@ export function errorHandler(error) {
     let data = Object.assign({ errors: error.errors}, e);
 
     feathersError = new errors.BadRequest(e.summary, data);
-  }
-  else if (error.message) {
+  } else if (error.message) {
     switch(error.message) {
       case Errors.PrimaryKeyUpdate.toString():
       case Errors.PrimaryKeyMissing.toString():

@@ -35,7 +35,7 @@ class Service {
     if(filters.$limit) {
       query.limit(filters.$limit);
     }
-    
+
     const performQuery = total => {
       return query.then(data => {
         return {
@@ -46,25 +46,28 @@ class Service {
         };
       });
     };
-    
+
     if(count) {
       return counter.then(performQuery);
     }
-    
+
     return performQuery();
   }
-  
+
   find(params) {
-    const paginate = !!this.paginate.default;
-    const result = this._find(params, paginate, query => filter(query, this.paginate));
-    
-    if(!paginate) {
+    const paginate = (params && typeof params.paginate !== 'undefined') ?
+      params.paginate : this.paginate;
+    const result = this._find(params, !!paginate.default,
+      query => filter(query, paginate)
+    );
+
+    if(!paginate.default) {
       return result.then(page => page.data);
     }
-    
+
     return result;
   }
-  
+
   _get(id) {
     return this.Model.findOne({ id }).then(instance => {
       if (!instance) {
@@ -74,16 +77,16 @@ class Service {
       return instance;
     }).catch(utils.errorHandler);
   }
-  
+
   get(... args) {
     return this._get(... args);
   }
-  
+
   _findOrGet(id, params) {
     if(id === null) {
       return this._find(params).then(page => page.data);
     }
-    
+
     return this._get(id);
   }
 
@@ -104,7 +107,7 @@ class Service {
       .then(() => this._findOrGet(id, params))
       .catch(utils.errorHandler);
   }
-  
+
   patch(... args) {
     return this._patch(... args);
   }

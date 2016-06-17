@@ -104,22 +104,8 @@ module.exports = new Promise(function(resolve) {
 
 You can run this example by using `node examples/app` and going to [localhost:8080/todos](http://localhost:8080/todos). You should see an empty array. That's because you don't have any Todos yet but you now have full CRUD for your new todos service.
 
-## Changelog
-
-__1.1.0__
-
-- Use internal methods instead of service methods directly
-
-__1.0.0__
-
-- Stable release of finalized adapter
- 
-__0.1.0__
-
-- First working release. Tests still need fixing but basic functionality works.
-
 ## License
 
-Copyright (c) 2015
+Copyright (c) 2016
 
 Licensed under the [MIT license](LICENSE).

@@ -1,5 +1,4 @@
-if(!global._babelPolyfill) { require('babel-polyfill'); }
-
+import omit from 'lodash.omit';
 import Proto from 'uberproto';
 import filter from 'feathers-query-filters';
 import errors from 'feathers-errors';
@@ -101,9 +100,7 @@ class Service {
       where[this.id] = id;
     }
 
-    delete data[this.id];
-
-    return this.Model.update({ where }, data)
+    return this.Model.update({ where }, omit(data, this.id))
       .then(() => this._findOrGet(id, params))
       .catch(utils.errorHandler);
   }
@@ -116,8 +113,6 @@ class Service {
     if (Array.isArray(data)) {
       return Promise.reject('Not replacing multiple records. Did you mean `patch`?');
     }
-
-    delete data[this.id];
 
     return this.Model.findOne({ id }).then(instance => {
       if (!instance) {

@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.3.0](https://github.com/feathersjs/feathers-waterline/tree/v1.3.0) (2016-07-08)
+[Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.2.0...v1.3.0)
+
+**Merged pull requests:**
+
+- feathers-service-tests@0.6.1 breaks build 🚨 [\#16](https://github.com/feathersjs/feathers-waterline/pull/16) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v1.2.0](https://github.com/feathersjs/feathers-waterline/tree/v1.2.0) (2016-06-17)
 [Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.1.0...v1.2.0)
 

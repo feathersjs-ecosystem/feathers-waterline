@@ -35,7 +35,7 @@
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "rm -rf .tmp && npm run compile && npm run jshint && npm run mocha && nsp check"
+    "test": "rm -rf .tmp && npm run compile && npm run jshint && npm run mocha"
   },
   "directories": {
     "lib": "lib"
@@ -44,6 +44,7 @@
     "babel-polyfill": "^6.3.14",
     "feathers-errors": "^2.0.2",
     "feathers-query-filters": "^1.5.1",
+    "lodash.omit": "^4.3.0",
     "uberproto": "^1.1.2",
     "waterline-errors": "^0.10.1"
   },
@@ -60,7 +61,6 @@
     "feathers-service-tests": "^0.6.1",
     "jshint": "^2.8.0",
     "mocha": "^2.5.0",
-    "nsp": "^2.2.0",
     "sails-disk": "^0.10.8",
     "waterline": "^0.12.1"
   }

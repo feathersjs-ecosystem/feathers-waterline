@@ -16,27 +16,27 @@ class Service {
   }
 
   _find(params, count, getFilter = filter) {
-    let where = utils.getWhere(params.query);
-    let filters = getFilter(where);
+    let { filters, query } = getFilter(params.query || {});
+    let where = utils.getWhere(query);
     let order = utils.getOrder(filters.$sort);
     let options = filters.$select ? { select: Array.from(filters.$select) } : {};
     let counter = this.Model.count().where(where);
-    let query = this.Model.find(where, options);
+    let q = this.Model.find(where, options);
 
     if (order) {
-      query.sort(order);
+      q.sort(order);
     }
 
     if (filters.$skip) {
-      query.skip(filters.$skip);
+      q.skip(filters.$skip);
     }
 
     if(filters.$limit) {
-      query.limit(filters.$limit);
+      q.limit(filters.$limit);
     }
 
     const performQuery = total => {
-      return query.then(data => {
+      return q.then(data => {
         return {
           total,
           limit: filters.$limit,

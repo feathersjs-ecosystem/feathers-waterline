@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.3.1](https://github.com/feathersjs/feathers-waterline/tree/v1.3.1) (2016-07-21)
+[Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.3.0...v1.3.1)
+
+**Merged pull requests:**
+
+- Update feathers-query-filters to version 2.0.0 🚀 [\#17](https://github.com/feathersjs/feathers-waterline/pull/17) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v1.3.0](https://github.com/feathersjs/feathers-waterline/tree/v1.3.0) (2016-07-08)
 [Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.2.0...v1.3.0)
 

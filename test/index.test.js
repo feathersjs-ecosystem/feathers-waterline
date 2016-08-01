@@ -56,21 +56,14 @@ ORM.initialize(config, (error, ontology) => {
     });
 
     describe('Common functionality', () => {
-      beforeEach(done => {
-        user.create({
+      beforeEach(() => {
+        return user.create({
           name: 'Doug',
           age: 32
-        }).then(user => {
-          _ids.Doug = user.id;
-          return done();
-        });
+        }).then(user => _ids.Doug = user.id);
       });
 
-      afterEach(done => {
-        user.destroy().then(() => {
-          return done();
-        });
-      });
+      afterEach(() => user.destroy());
 
       base(people, _ids, errors);
     });
@@ -78,8 +71,10 @@ ORM.initialize(config, (error, ontology) => {
     describe('Waterline service ORM errors', () => orm(people, _ids, errors));
 
     describe('Waterline service example test', () => {
-      before(done => exampleServer.then(() => done()));
-      after(done => exampleServer.then(s => s.close(() => done())));
+      before(() => exampleServer);
+      after(done => {
+        exampleServer.then(s => s.close(() => done()));
+      });
 
       example();
     });

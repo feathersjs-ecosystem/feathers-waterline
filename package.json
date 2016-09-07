@@ -58,7 +58,7 @@
     "chai": "^3.4.1",
     "feathers": "^2.0.0",
     "feathers-rest": "^1.1.1",
-    "feathers-service-tests": "^0.6.1",
+    "feathers-service-tests": "^0.7.0",
     "jshint": "^2.8.0",
     "mocha": "^3.0.0",
     "sails-disk": "^0.10.8",

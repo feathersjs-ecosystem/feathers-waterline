@@ -5,17 +5,17 @@ import errors from 'feathers-errors';
 import * as utils from './utils';
 
 class Service {
-  constructor(options) {
+  constructor (options) {
     this.paginate = options.paginate || {};
     this.Model = options.Model;
     this.id = options.id || 'id';
   }
 
-  extend(obj) {
+  extend (obj) {
     return Proto.extend(obj, this);
   }
 
-  _find(params, count, getFilter = filter) {
+  _find (params, count, getFilter = filter) {
     let { filters, query } = getFilter(params.query || {});
     let where = utils.getWhere(query);
     let order = utils.getOrder(filters.$sort);
@@ -31,7 +31,7 @@ class Service {
       q.skip(filters.$skip);
     }
 
-    if(filters.$limit) {
+    if (filters.$limit) {
       q.limit(filters.$limit);
     }
 
@@ -46,28 +46,28 @@ class Service {
       });
     };
 
-    if(count) {
+    if (count) {
       return counter.then(performQuery);
     }
 
     return performQuery();
   }
 
-  find(params) {
-    const paginate = (params && typeof params.paginate !== 'undefined') ?
-      params.paginate : this.paginate;
+  find (params) {
+    const paginate = (params && typeof params.paginate !== 'undefined')
+      ? params.paginate : this.paginate;
     const result = this._find(params, !!paginate.default,
       query => filter(query, paginate)
     );
 
-    if(!paginate.default) {
+    if (!paginate.default) {
       return result.then(page => page.data);
     }
 
     return result;
   }
 
-  _get(id) {
+  _get (id) {
     return this.Model.findOne({ id }).then(instance => {
       if (!instance) {
         throw new errors.NotFound(`No record found for id '${id}'`);
@@ -77,23 +77,23 @@ class Service {
     }).catch(utils.errorHandler);
   }
 
-  get(... args) {
-    return this._get(... args);
+  get (...args) {
+    return this._get(...args);
   }
 
-  _findOrGet(id, params) {
-    if(id === null) {
+  _findOrGet (id, params) {
+    if (id === null) {
       return this._find(params).then(page => page.data);
     }
 
     return this._get(id);
   }
 
-  create(data) {
+  create (data) {
     return this.Model.create(data).catch(utils.errorHandler);
   }
 
-  _patch(id, data, params) {
+  _patch (id, data, params) {
     const where = Object.assign({}, params.query);
 
     if (id !== null) {
@@ -105,11 +105,11 @@ class Service {
       .catch(utils.errorHandler);
   }
 
-  patch(... args) {
-    return this._patch(... args);
+  patch (...args) {
+    return this._patch(...args);
   }
 
-  update(id, data) {
+  update (id, data) {
     if (Array.isArray(data)) {
       return Promise.reject('Not replacing multiple records. Did you mean `patch`?');
     }
@@ -121,7 +121,6 @@ class Service {
 
       let copy = {};
       Object.keys(instance.toJSON()).forEach(key => {
-
         // NOTE (EK): Make sure that we don't waterline created fields to null
         // just because a user didn't pass them in.
         if ((key === 'createdAt' || key === 'updatedAt') && typeof data[key] === 'undefined') {
@@ -140,7 +139,7 @@ class Service {
     .catch(utils.errorHandler);
   }
 
-  remove(id, params) {
+  remove (id, params) {
     return this._findOrGet(id, params).then(data => {
       const where = Object.assign({}, params.query);
 
@@ -154,7 +153,7 @@ class Service {
   }
 }
 
-export default function init(Model) {
+export default function init (Model) {
   return new Service(Model);
 }
 

@@ -60,7 +60,7 @@ ORM.initialize(config, (error, ontology) => {
         return user.create({
           name: 'Doug',
           age: 32
-        }).then(user => _ids.Doug = user.id);
+        }).then(user => (_ids.Doug = user.id));
       });
 
       afterEach(() => user.destroy());

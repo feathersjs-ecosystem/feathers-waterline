@@ -1,16 +1,16 @@
 import errors from 'feathers-errors';
 import { adapter as Errors } from 'waterline-errors';
 
-export function errorHandler(error) {
+export function errorHandler (error) {
   let feathersError = error;
 
-  if (error.constructor.name && (error.constructor.name === 'WLValidationError' || error.constructor.name === 'WLUsageError' )) {
+  if (error.constructor.name && (error.constructor.name === 'WLValidationError' || error.constructor.name === 'WLUsageError')) {
     let e = error.toJSON();
-    let data = Object.assign({ errors: error.errors}, e);
+    let data = Object.assign({ errors: error.errors }, e);
 
     feathersError = new errors.BadRequest(e.summary, data);
   } else if (error.message) {
-    switch(error.message) {
+    switch (error.message) {
       case Errors.PrimaryKeyUpdate.toString():
       case Errors.PrimaryKeyMissing.toString():
       case Errors.PrimaryKeyCollision.toString():
@@ -40,7 +40,7 @@ export function errorHandler(error) {
   throw feathersError;
 }
 
-export function getOrder(sort={}) {
+export function getOrder (sort = {}) {
   let order = {};
 
   Object.keys(sort).forEach(name => {
@@ -61,12 +61,12 @@ const queryMappings = {
 
 const specials = ['$sort', '$limit', '$skip', '$select'];
 
-function getValue(value, prop) {
-  if(typeof value === 'object' && specials.indexOf(prop) === -1) {
+function getValue (value, prop) {
+  if (typeof value === 'object' && specials.indexOf(prop) === -1) {
     let query = {};
 
     Object.keys(value).forEach(key => {
-      if(queryMappings[key]) {
+      if (queryMappings[key]) {
         query[queryMappings[key]] = value[key];
       } else {
         query[key] = value[key];
@@ -79,19 +79,19 @@ function getValue(value, prop) {
   return value;
 }
 
-export function getWhere(query) {
+export function getWhere (query) {
   let where = {};
 
-  if(typeof query !== 'object') {
+  if (typeof query !== 'object') {
     return {};
   }
 
   Object.keys(query).forEach(prop => {
     const value = query[prop];
 
-    if(prop === '$or') {
+    if (prop === '$or') {
       where.or = value;
-    } else if(value.$in) {
+    } else if (value.$in) {
       where[prop] = value.$in;
     } else {
       where[prop] = getValue(value, prop);

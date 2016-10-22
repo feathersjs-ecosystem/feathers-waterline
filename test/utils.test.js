@@ -3,7 +3,7 @@ import errors from 'feathers-errors';
 import * as utils from '../src/utils';
 import { adapter as Errors } from 'waterline-errors';
 
-const MockValidationError = function(msg) {
+const MockValidationError = function (msg) {
   return {
     message: msg,
     constructor: {
@@ -12,7 +12,7 @@ const MockValidationError = function(msg) {
     errors: {
       text: ['A record with that `text` already exists (`do dishes`).']
     },
-    toJSON: function(){
+    toJSON: function () {
       return {
         'error': 'E_VALIDATION',
         'status': 400,
@@ -31,7 +31,7 @@ const MockValidationError = function(msg) {
   };
 };
 
-const MockUsageError = function(msg) {
+const MockUsageError = function (msg) {
   return {
     message: msg,
     constructor: {
@@ -61,8 +61,7 @@ describe('Feathers Waterline Utils', () => {
       let e = MockValidationError('Invalid Text');
       try {
         utils.errorHandler(e);
-      }
-      catch(error) {
+      } catch (error) {
         expect(error.message).to.equal('Invalid Email');
       }
     });
@@ -75,8 +74,7 @@ describe('Feathers Waterline Utils', () => {
       let e = MockValidationError();
       try {
         utils.errorHandler(e);
-      }
-      catch(error) {
+      } catch (error) {
         expect(error.errors).to.deep.equal(textError);
       }
     });
@@ -165,7 +163,7 @@ describe('Feathers Waterline Utils', () => {
       expect(order).to.deep.equal({ name: 'asc', age: 'desc' });
     });
   });
-  
+
   describe('getWhere', () => {
     it('returns empty object when nothing is passed in', () => {
       let where = utils.getWhere();
@@ -174,15 +172,15 @@ describe('Feathers Waterline Utils', () => {
     });
 
     it('returns where conditions properly converted', () => {
-      let where = utils.getWhere({ name: 'Joe', age: { $lte: 25 }});
+      let where = utils.getWhere({ name: 'Joe', age: { $lte: 25 } });
 
-      expect(where).to.deep.equal({ name: 'Joe', age: { '<=': 25 }});
+      expect(where).to.deep.equal({ name: 'Joe', age: { '<=': 25 } });
     });
 
     it('converts $nin to $notIn', () => {
-      let where = utils.getWhere({ name: { $nin: ['Joe', 'Alice'] }});
+      let where = utils.getWhere({ name: { $nin: ['Joe', 'Alice'] } });
 
-      expect(where).to.deep.equal({ name: { '!': ['Joe', 'Alice'] }});
+      expect(where).to.deep.equal({ name: { '!': ['Joe', 'Alice'] } });
     });
   });
 });

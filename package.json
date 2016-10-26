@@ -35,8 +35,9 @@
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
-    "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "rimraf .tmp && npm run compile && npm run lint && npm run mocha"
+    "mocha": "mocha --opts mocha.opts",
+    "test": "rimraf .tmp && npm run compile && npm run lint && npm run coverage",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -68,6 +69,7 @@
     "feathers": "^2.0.0",
     "feathers-rest": "^1.1.1",
     "feathers-service-tests": "^0.6.1",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.0",
     "rimraf": "^2.5.4",
     "sails-disk": "^0.10.8",

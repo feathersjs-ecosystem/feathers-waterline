@@ -91,7 +91,7 @@ export function getWhere (query) {
 
     if (prop === '$or') {
       where.or = value;
-    } else if (value.$in) {
+    } else if (value && value.$in) {
       where[prop] = value.$in;
     } else {
       where[prop] = getValue(value, prop);

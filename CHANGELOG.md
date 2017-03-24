@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.3.2](https://github.com/feathersjs/feathers-waterline/tree/v1.3.2) (2017-03-24)
+[Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.3.1...v1.3.2)
+
+**Closed issues:**
+
+- Feathers Waterline service [\#22](https://github.com/feathersjs/feathers-waterline/issues/22)
+- Waterline service example [\#21](https://github.com/feathersjs/feathers-waterline/issues/21)
+
+**Merged pull requests:**
+
+- fix for error Cannot read property '$in' of undefined on undefined va… [\#33](https://github.com/feathersjs/feathers-waterline/pull/33) ([gbevan](https://github.com/gbevan))
+- 👻😱 Node.js 0.10 is unmaintained 😱👻 [\#31](https://github.com/feathersjs/feathers-waterline/pull/31) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- jshint —\> semistandard [\#29](https://github.com/feathersjs/feathers-waterline/pull/29) ([corymsmith](https://github.com/corymsmith))
+- Update mocha to version 3.0.0 🚀 [\#19](https://github.com/feathersjs/feathers-waterline/pull/19) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v1.3.1](https://github.com/feathersjs/feathers-waterline/tree/v1.3.1) (2016-07-21)
 [Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.3.0...v1.3.1)
 

@@ -1,5 +1,7 @@
 # feathers-waterline
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-waterline.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-waterline.png?branch=master)](https://travis-ci.org/feathersjs/feathers-waterline)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-waterline.png)](https://codeclimate.com/github/feathersjs/feathers-waterline)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-waterline/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-waterline/coverage)

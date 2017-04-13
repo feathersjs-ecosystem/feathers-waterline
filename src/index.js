@@ -111,7 +111,7 @@ class Service {
 
   update (id, data) {
     if (Array.isArray(data)) {
-      return Promise.reject('Not replacing multiple records. Did you mean `patch`?');
+      return Promise.reject(new errors.BadRequest('Not replacing multiple records. Did you mean `patch`?'));
     }
 
     return this.Model.findOne({ id }).then(instance => {

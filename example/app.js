@@ -1,5 +1,3 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import feathers from 'feathers';
 import rest from 'feathers-rest';
 import bodyParser from 'body-parser';

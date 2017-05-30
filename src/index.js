@@ -125,12 +125,12 @@ class Service {
 //        copy[key] = data[key];
       }
     });
-    Object.keys(data.toJSON()).forEach(key => {
+    Object.keys(data).forEach(key => {
       if ((key === 'createdAt' || key === 'updatedAt')) {
         return;
       }
       copy[key] = data[key];
-    })
+    });
     return copy;
   }
 
@@ -151,7 +151,7 @@ class Service {
       if (_.startsWith(k, '$')) {
         delete where[k];
       }
-    })
+    });
 
     let p;
     if (id) {

@@ -1,4 +1,4 @@
-import omit from 'lodash.omit';
+// import omit from 'lodash.omit';
 import Proto from 'uberproto';
 import filter from 'feathers-query-filters';
 import errors from 'feathers-errors';
@@ -101,7 +101,7 @@ class Service {
       where[this.id] = id;
     }
 
-    return this.Model.update({ where }, omit(data, this.id))
+    return this.Model.update({ where }, _.omit(data, this.id))
       .then(() => this._findOrGet(id, params))
       .catch(utils.errorHandler);
   }

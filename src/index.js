@@ -153,6 +153,8 @@ class Service {
       }
     });
 
+    const preserveWhere = _.cloneDeep(where);
+
     let p;
     if (id) {
       p = this.Model.findOne(where);
@@ -161,7 +163,11 @@ class Service {
     }
     return p.then(instance => {
       if (!instance) {
-        throw new errors.NotFound(`No record found for criteria '${where}'`);
+        if (id) {
+          throw new errors.NotFound('No record found for id \'' + id + '\'');
+        } else {
+          throw new errors.NotFound('No record found for criteria \'' + JSON.stringify(preserveWhere) + '\'');
+        }
       }
       let copy;
 

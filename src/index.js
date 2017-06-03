@@ -121,8 +121,6 @@ class Service {
 
       if (typeof data[key] === 'undefined') {
         copy[key] = null;
-//      } else {
-//        copy[key] = data[key];
       }
     });
     Object.keys(data).forEach(key => {

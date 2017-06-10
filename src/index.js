@@ -1,8 +1,9 @@
-import omit from 'lodash.omit';
+// import omit from 'lodash.omit';
 import Proto from 'uberproto';
 import filter from 'feathers-query-filters';
 import errors from 'feathers-errors';
 import * as utils from './utils';
+import * as _ from 'lodash';
 
 class Service {
   constructor (options) {
@@ -100,7 +101,7 @@ class Service {
       where[this.id] = id;
     }
 
-    return this.Model.update({ where }, omit(data, this.id))
+    return this.Model.update({ where }, _.omit(data, this.id))
       .then(() => this._findOrGet(id, params))
       .catch(utils.errorHandler);
   }
@@ -109,32 +110,76 @@ class Service {
     return this._patch(...args);
   }
 
-  update (id, data) {
+  _copy (data, instance) {
+    let copy = {};
+    Object.keys(instance.toJSON()).forEach(key => {
+      // NOTE (EK): Make sure that we don't waterline created fields to null
+      // just because a user didn't pass them in.
+      if ((key === 'createdAt' || key === 'updatedAt') && typeof data[key] === 'undefined') {
+        return;
+      }
+
+      if (typeof data[key] === 'undefined') {
+        copy[key] = null;
+      }
+    });
+    Object.keys(data).forEach(key => {
+      if ((key === 'createdAt' || key === 'updatedAt')) {
+        return;
+      }
+      copy[key] = data[key];
+    });
+    return copy;
+  }
+
+  update (id, data, params) {
     if (Array.isArray(data)) {
       return Promise.reject(new errors.BadRequest('Not replacing multiple records. Did you mean `patch`?'));
     }
 
-    return this.Model.findOne({ id }).then(instance => {
+    const where = Object.assign({}, params.query);
+
+    if (id !== null) {
+      where[this.id] = id;
+    }
+
+    // remove any $... fields as they are parameters to be passed to the adaptor and
+    // shouldnt be used for the following find/findOne().
+    _.each(where, (v, k) => {
+      if (_.startsWith(k, '$')) {
+        delete where[k];
+      }
+    });
+
+    const preserveWhere = _.cloneDeep(where);
+
+    let p;
+    if (id) {
+      p = this.Model.findOne(where);
+    } else {
+      p = this.Model.find(where);
+    }
+    return p.then(instance => {
       if (!instance) {
-        throw new errors.NotFound(`No record found for id '${id}'`);
+        if (id) {
+          throw new errors.NotFound('No record found for id \'' + id + '\'');
+        } else {
+          throw new errors.NotFound('No record found for criteria \'' + JSON.stringify(preserveWhere) + '\'');
+        }
+      }
+      let copy;
+
+      // handle criteria matching multiple documents
+      if (_.isArray(instance)) {
+        copy = [];
+        instance.forEach((e) => {
+          copy.push(this._copy(data, e));
+        });
+      } else {
+        copy = this._copy(data, instance);
       }
 
-      let copy = {};
-      Object.keys(instance.toJSON()).forEach(key => {
-        // NOTE (EK): Make sure that we don't waterline created fields to null
-        // just because a user didn't pass them in.
-        if ((key === 'createdAt' || key === 'updatedAt') && typeof data[key] === 'undefined') {
-          return;
-        }
-
-        if (typeof data[key] === 'undefined') {
-          copy[key] = null;
-        } else {
-          copy[key] = data[key];
-        }
-      });
-
-      return this._patch(id, copy, {});
+      return this._patch(id, copy, params);
     })
     .catch(utils.errorHandler);
   }

@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.4.0](https://github.com/feathersjs/feathers-waterline/tree/v1.4.0) (2017-06-10)
+[Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.3.2...v1.4.0)
+
+**Merged pull requests:**
+
+- Fix feathers update method with null id and params criteria [\#38](https://github.com/feathersjs/feathers-waterline/pull/38) ([gbevan](https://github.com/gbevan))
+- Update chai to the latest version 🚀 [\#37](https://github.com/feathersjs/feathers-waterline/pull/37) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#35](https://github.com/feathersjs/feathers-waterline/pull/35) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#34](https://github.com/feathersjs/feathers-waterline/pull/34) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.2](https://github.com/feathersjs/feathers-waterline/tree/v1.3.2) (2017-03-24)
 [Full Changelog](https://github.com/feathersjs/feathers-waterline/compare/v1.3.1...v1.3.2)
 

@@ -74,6 +74,6 @@
     "rimraf": "^2.5.4",
     "sails-disk": "^0.10.8",
     "semistandard": "^11.0.0",
-    "waterline": "^0.12.1"
+    "waterline": "^0.13.1-5"
   }
 }

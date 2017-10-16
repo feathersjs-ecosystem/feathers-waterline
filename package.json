@@ -2,7 +2,7 @@
   "name": "feathers-waterline",
   "description": "A Waterline ORM service adapter",
   "version": "1.4.0",
-  "homepage": "https://github.com/feathersjs/feathers-waterline",
+  "homepage": "https://github.com/feathersjs-ecosystem/feathers-waterline",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-waterline.git"
+    "url": "git://github.com/feathersjs-ecosystem/feathers-waterline.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-waterline/issues"
+    "url": "https://github.com/feathersjs-ecosystem/feathers-waterline/issues"
   },
   "engines": {
     "node": ">= 4"

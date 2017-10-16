@@ -1,11 +1,12 @@
 # feathers-waterline
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-waterline.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs-ecosystem/feathers-waterline.svg)](https://greenkeeper.io/)
+[![Maintenance](https://img.shields.io/maintenance/no/2017.svg)](#status)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-waterline.png?branch=master)](https://travis-ci.org/feathersjs/feathers-waterline)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-waterline.png)](https://codeclimate.com/github/feathersjs/feathers-waterline)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-waterline/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-waterline/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-waterline.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-waterline)
+[![Build Status](https://travis-ci.org/feathersjs-ecosystem/feathers-waterline.png?branch=master)](https://travis-ci.org/feathersjs-ecosystem/feathers-waterline)
+[![Code Climate](https://codeclimate.com/github/feathersjs-ecosystem/feathers-waterline.png)](https://codeclimate.com/github/feathersjs-ecosystem/feathers-waterline)
+[![Test Coverage](https://codeclimate.com/github/feathersjs-ecosystem/feathers-waterline/badges/coverage.svg)](https://codeclimate.com/github/feathersjs-ecosystem/feathers-waterline/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs-ecosystem/feathers-waterline.svg?style=flat-square)](https://david-dm.org/feathersjs-ecosystem/feathers-waterline)
 [![Download Status](https://img.shields.io/npm/dm/feathers-waterline.svg?style=flat-square)](https://www.npmjs.com/package/feathers-waterline)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
@@ -28,6 +29,10 @@ A database adapter for the [Waterline ORM](https://github.com/balderdashy/waterl
 - [Apache Cassandra](https://github.com/dtoubelis/sails-cassandra)
 - [GraphQL](https://github.com/wistityhq/waterline-graphql)
 - [Solr](https://github.com/sajov/sails-solr)
+
+## Status
+
+This module will continue to work as is but needs a maintainer for future feature and dependency updates. Create an issue if you are interested.
 
 ## Installation
 

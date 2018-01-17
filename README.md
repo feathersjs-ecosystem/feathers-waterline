@@ -1,5 +1,7 @@
 # feathers-waterline
 
+> __Important:__ This project is no longer maintained.
+
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs-ecosystem/feathers-waterline.svg)](https://greenkeeper.io/)
 [![Maintenance](https://img.shields.io/maintenance/no/2017.svg)](#status)
 
